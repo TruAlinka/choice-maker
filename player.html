@@ -25,15 +25,21 @@
       box-sizing: border-box;
     }
 
+    html {
+      height: auto;
+      overflow-y: auto;
+    }
+
     html,
     body {
       margin: 0;
-      min-height: 100%;
       overflow-x: hidden;
       background: transparent;
     }
 
     body {
+      min-height: 100vh;
+      height: auto;
       color: #fff;
       font-family: Arial, sans-serif;
     }
@@ -45,47 +51,49 @@
 
     #app {
       min-height: 100vh;
+      height: auto;
       padding: 12px;
-
-      display: grid;
-      place-items: center;
+      display: flex;
+      justify-content: center;
     }
 
-    .card {
+    .player {
       position: relative;
-
       width: 100%;
+      max-width: 900px;
+      height: auto;
       min-height: calc(100vh - 24px);
-
-      overflow: hidden;
       border-radius: 18px;
-
+      background-color: var(--player-bg, #111a31);
       background-size: cover;
       background-position: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      font-family: var(--body-font, Arial, sans-serif);
     }
 
-    .video {
+    .player.transparent {
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    .player > video {
       position: absolute;
       inset: 0;
-
       width: 100%;
       height: 100%;
-
       object-fit: cover;
+      border-radius: 18px;
     }
 
-    .overlay {
-      position: absolute;
-      inset: 0;
-
+    .player-overlay {
+      position: relative;
+      min-height: calc(100vh - 24px);
       padding: clamp(20px, 5vw, 48px);
-
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-    }
-
-    .shade {
+      gap: 20px;
+      border-radius: 18px;
       background:
         linear-gradient(
           180deg,
@@ -94,255 +102,194 @@
         );
     }
 
-    .top {
+    .player.transparent:not(.has-media) .player-overlay {
+      background: transparent;
+    }
+
+    .player-top {
       display: flex;
       justify-content: space-between;
       gap: 15px;
-
       font-size: 10px;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .label {
+    .scene-label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--player-accent, #9bf6b0);
       font-size: 11px;
       font-weight: 900;
       letter-spacing: 0.13em;
       text-transform: uppercase;
     }
 
-    h1 {
+    .player h3 {
       margin: 10px 0 20px;
-
-      font-family: var(--heading);
-
+      font-family: var(--heading-font, Georgia, serif);
       font-size: clamp(27px, 5vw, 54px);
       line-height: 1.15;
     }
 
-    p {
+    .player p {
+      margin: 0 0 20px;
       font-size: clamp(15px, 2vw, 20px);
       line-height: 1.55;
     }
 
-    .story {
+    .story-card {
       padding: clamp(18px, 4vw, 34px);
     }
 
-    .style-none {
+    .card-none {
       padding: 0;
     }
 
-    .style-vintage {
-      border: 3px solid var(--border);
+    .card-vintage {
+      border: 3px solid var(--border-color, #d8ae7b);
       border-radius: 16px;
-
       color: #f7e4c8;
-
       background:
         linear-gradient(
           135deg,
           rgba(20, 11, 8, 0.96),
           rgba(35, 18, 12, 0.93)
         );
-
       box-shadow:
         0 15px 40px rgba(0, 0, 0, 0.67),
-        inset 0 0 30px
-          rgba(111, 55, 26, 0.2);
+        inset 0 0 30px rgba(111, 55, 26, 0.2);
     }
 
-    .style-glass {
-      border: 1px solid
-        rgba(255, 255, 255, 0.33);
-
+    .card-glass {
+      border: 1px solid rgba(255, 255, 255, 0.33);
       border-radius: 18px;
-
-      background:
-        rgba(255, 255, 255, 0.09);
-
-      box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.4);
-
+      background: rgba(255, 255, 255, 0.09);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(12px);
     }
 
-    .style-neon {
-      border: 2px solid var(--border);
+    .card-neon {
+      border: 2px solid var(--border-color, #66ccff);
       border-radius: 12px;
-
       background: rgba(6, 11, 24, 0.86);
-
       box-shadow:
-        0 0 10px var(--border),
+        0 0 10px var(--border-color, #66ccff),
         inset 0 0 18px #000;
     }
 
-    .style-parchment {
+    .card-parchment {
       border: 2px solid #79552f;
       border-radius: 4px;
-
       color: #332414;
       background: rgba(234, 215, 171, 0.92);
-
-      box-shadow:
-        0 12px 35px rgba(0, 0, 0, 0.53);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.53);
     }
 
-    .answers {
+    .player-answers {
       display: grid;
       gap: 9px;
       margin-top: 16px;
     }
 
-    .answer {
+    .player-answer {
       width: 100%;
       padding: 14px 17px;
-
       display: flex;
       align-items: center;
       gap: 12px;
-
       color: #fff;
+      background: rgba(17, 24, 39, 0.74);
       text-align: left;
     }
 
     .answer-standard {
-      border: 1px solid
-        rgba(255, 255, 255, 0.21);
-
-      background:
-        rgba(17, 24, 39, 0.77);
+      border: 1px solid rgba(255, 255, 255, 0.21);
     }
 
     .answer-vintage {
-      border: 2px solid var(--border);
-
+      border: 2px solid var(--border-color, #d8ae7b);
       color: #f7e4c8;
       background: rgba(26, 13, 9, 0.91);
     }
 
     .answer-double {
-      border: 4px double var(--border);
-
-      background:
-        rgba(17, 24, 39, 0.79);
+      border: 4px double var(--border-color, #d8ae7b);
+      background: rgba(17, 24, 39, 0.79);
     }
 
     .answer-neon {
-      border: 1px solid var(--border);
-
-      background:
-        rgba(7, 16, 29, 0.9);
-
-      box-shadow:
-        0 0 7px var(--border);
+      border: 1px solid var(--border-color, #66ccff);
+      background: rgba(7, 16, 29, 0.9);
+      box-shadow: 0 0 7px var(--border-color, #66ccff);
     }
 
     .answer-dashed {
-      border: 2px dashed var(--border);
-
-      background:
-        rgba(17, 24, 39, 0.67);
+      border: 2px dashed var(--border-color, #d8ae7b);
+      background: rgba(17, 24, 39, 0.67);
     }
 
     .answer-text {
       border: 0;
-      border-bottom: 1px solid var(--border);
-
+      border-bottom: 1px solid var(--border-color, #fff);
       border-radius: 0 !important;
       background: transparent;
     }
 
-    .answer:hover {
+    .player-answer:hover {
       color: #101827;
-      background: var(--accent);
+      background: var(--player-accent, #9bf6b0);
     }
 
-    .shape-soft {
-      border-radius: 12px;
+    .shape-soft { border-radius: 12px; }
+    .shape-round { border-radius: 999px; }
+    .shape-square { border-radius: 3px; }
+
+    .player-progress {
+      position: relative;
+      margin-top: 10px;
     }
 
-    .shape-round {
-      border-radius: 999px;
-    }
-
-    .shape-square {
-      border-radius: 3px;
-    }
-
-    /* Прогресс */
-
-    .progress {
-      position: absolute;
-
-      left: clamp(20px, 5vw, 48px);
-      right: clamp(20px, 5vw, 48px);
-      bottom: 18px;
-
-      z-index: 22;
-    }
-
-    .progress-row {
+    .player-progress-row {
       display: flex;
       justify-content: space-between;
-
       margin-bottom: 7px;
-
       font-size: 10px;
       font-weight: 900;
-
       text-shadow: 0 1px 5px #000;
     }
 
-    .progress-track {
+    .player-progress-track {
       height: 9px;
       overflow: hidden;
-
-      border: 1px solid
-        rgba(255, 255, 255, 0.25);
-
+      border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 999px;
-
-      background:
-        rgba(5, 9, 20, 0.55);
+      background: rgba(5, 9, 20, 0.55);
     }
 
-    .progress-fill {
+    .player-progress-fill {
       height: 100%;
-
       border-radius: 999px;
-      background: var(--accent);
-
-      box-shadow:
-        0 0 14px var(--accent);
-
+      background: var(--player-accent, #9bf6b0);
+      box-shadow: 0 0 14px var(--player-accent, #9bf6b0);
       transition: width 0.5s;
     }
 
-    .has-progress .overlay {
-      padding-bottom: 76px;
-    }
-
-    /* Эффекты */
-
-    .effect {
+    .effect-layer {
       position: absolute;
       inset: 0;
       z-index: 15;
-
       overflow: hidden;
       pointer-events: none;
+      border-radius: 18px;
     }
 
-    .fog::before,
-    .fog::after {
+    .effect-fog::before,
+    .effect-fog::after {
       content: "";
-
       position: absolute;
       inset: -30%;
-
       background:
         radial-gradient(
           ellipse at 30% 50%,
@@ -354,21 +301,17 @@
           rgba(191, 202, 201, 0.72),
           transparent 52%
         );
-
       filter: blur(25px);
-
-      animation:
-        fogMove 5s ease-in-out
-        infinite alternate;
+      animation: fogMove 5s ease-in-out infinite alternate;
     }
 
-    .fog::after {
+    .effect-fog::after {
       transform: scaleX(-1);
       opacity: 0.65;
       animation-duration: 7s;
     }
 
-    .rain {
+    .effect-rain {
       background-image:
         repeating-linear-gradient(
           105deg,
@@ -376,29 +319,372 @@
           rgba(189, 225, 255, 0.5) 13px 14px,
           transparent 15px 24px
         );
-
       background-size: 180px 180px;
-
-      animation:
-        rainFall 0.45s linear infinite;
+      animation: rainFall 0.45s linear infinite;
+      opacity: 0.75;
     }
 
-    .fire {
+    .effect-fire {
       top: 45%;
-
       background:
-        radial-gradient(
-          ellipse at 15% 110%,
-          #ffeb3b 0 6%,
-          #ff6500 18%,
-          transparent 45%
-        ),
-        radial-gradient(
-          ellipse at 50% 115%,
-          #fff176 0 5%,
-          #ff3d00 22%,
-          transparent 48%
-        ),
-        radial-gradient(
-          ellipse at 85% 110%,
-          #
+        radial-gradient(ellipse at 15% 110%, #ffeb3b 0 6%, #ff6500 18%, transparent 45%),
+        radial-gradient(ellipse at 50% 115%, #fff176 0 5%, #ff3d00 22%, transparent 48%),
+        radial-gradient(ellipse at 85% 110%, #ffca28 0 7%, #d50000 22%, transparent 48%);
+      filter: blur(4px);
+      animation: firePulse 0.45s ease-in-out infinite alternate;
+    }
+
+    .effect-glitch {
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0 8px,
+          rgba(0, 229, 255, 0.13) 9px 10px,
+          rgba(255, 23, 68, 0.13) 11px 12px
+        );
+      mix-blend-mode: screen;
+      animation: glitchLayer 0.18s steps(2) infinite;
+    }
+
+    .player.effect-shake {
+      animation: screenShake 0.55s linear infinite;
+    }
+
+    .intensity-low { opacity: 0.4; }
+    .intensity-medium { opacity: 0.7; }
+    .intensity-high { opacity: 1; }
+
+    @keyframes fogMove {
+      from { transform: translateX(-12%) scale(1); }
+      to { transform: translateX(12%) scale(1.15); }
+    }
+
+    @keyframes rainFall {
+      to { background-position: -45px 180px; }
+    }
+
+    @keyframes firePulse {
+      from { transform: scaleY(0.9); opacity: 0.7; }
+      to { transform: scaleY(1.08); opacity: 1; }
+    }
+
+    @keyframes glitchLayer {
+      0% { transform: translate(0); }
+      25% { transform: translate(5px, -2px); }
+      50% { transform: translate(-4px, 2px); }
+      75% { transform: translate(3px, 1px); }
+    }
+
+    @keyframes screenShake {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-6px, 3px); }
+      40% { transform: translate(5px, -3px); }
+      60% { transform: translate(-4px, -2px); }
+      80% { transform: translate(4px, 3px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .effect-layer,
+      .player.effect-shake {
+        animation: none !important;
+      }
+      .player-progress-fill {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    "use strict";
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(
+        /[&<>"']/g,
+        c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c])
+      );
+    }
+
+    function directMediaUrl(value, mediaType = "image") {
+      const originalUrl = String(value || "").trim();
+      if (!originalUrl) return "";
+      try {
+        const url = new URL(originalUrl);
+        if (url.hostname.includes("drive.google.com")) {
+          let fileId = "";
+          const pathMatch = url.pathname.match(/\/file\/d\/([^/]+)/);
+          if (pathMatch) fileId = pathMatch[1];
+          if (!fileId) fileId = url.searchParams.get("id") || "";
+          if (fileId) {
+            if (mediaType === "image") {
+              return "https://lh3.googleusercontent.com/d/" + encodeURIComponent(fileId);
+            }
+            return "https://drive.google.com/uc?export=download&id=" + encodeURIComponent(fileId);
+          }
+        }
+        if (url.hostname.includes("dropbox.com")) {
+          url.searchParams.delete("dl");
+          url.searchParams.set("raw", "1");
+          return url.toString();
+        }
+        return originalUrl;
+      } catch (e) {
+        return originalUrl;
+      }
+    }
+
+    function decodeProject() {
+      const hash = location.hash.slice(1);
+      if (!hash) return null;
+      try {
+        const base64 = hash.replace(/-/g, "+").replace(/_/g, "/");
+        const json = decodeURIComponent(escape(atob(base64)));
+        return JSON.parse(json);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const project = decodeProject();
+    const app = document.getElementById("app");
+
+    if (!project) {
+      app.innerHTML =
+        '<p style="padding:20px;color:#fff;font-family:Arial,sans-serif;">' +
+        "Не удалось загрузить игру. Проверьте ссылку iframe." +
+        "</p>";
+    } else {
+      let playingSceneId = project.startSceneId;
+      let visitedScenes = new Set([playingSceneId]);
+
+      function getDistanceToFinish(startSceneId) {
+        const queue = [[startSceneId, 0]];
+        const checked = new Set();
+        while (queue.length > 0) {
+          const [sceneId, distance] = queue.shift();
+          if (checked.has(sceneId)) continue;
+          checked.add(sceneId);
+          const scene = project.scenes.find(item => item.id === sceneId);
+          if (!scene) continue;
+          const hasFinish = scene.answers.some(
+            a => a.action === "finish" || a.nextSceneId === "__finish__"
+          );
+          if (hasFinish) return distance + 1;
+          scene.answers.forEach(a => {
+            if (a.action !== "finish" && a.nextSceneId && !checked.has(a.nextSceneId)) {
+              queue.push([a.nextSceneId, distance + 1]);
+            }
+          });
+        }
+        return Math.max(1, project.scenes.length);
+      }
+
+      function calculateProgress(sceneId, finished = false) {
+        if (finished) return 100;
+        const passed = Math.max(0, visitedScenes.size - 1);
+        if (passed === 0) return 0;
+        const remaining = getDistanceToFinish(sceneId);
+        return Math.max(5, Math.min(95, Math.round(passed / (passed + remaining) * 100)));
+      }
+
+      function createProgressMarkup(value) {
+        if (!project.theme.showProgress) return "";
+        return `
+          <div class="player-progress">
+            <div class="player-progress-row">
+              <span>Progress</span>
+              <span>${value}%</span>
+            </div>
+            <div class="player-progress-track">
+              <div class="player-progress-fill" style="width:${value}%"></div>
+            </div>
+          </div>`;
+      }
+
+      function createEffectMarkup(atmosphere) {
+        if (
+          project.theme.reduceMotion ||
+          !atmosphere ||
+          atmosphere.type === "none" ||
+          atmosphere.type === "shake"
+        ) return "";
+        return `<div class="effect-layer effect-${atmosphere.type} intensity-${atmosphere.intensity}"></div>`;
+      }
+
+      function applyTimedEffect(player, atmosphere) {
+        if (project.theme.reduceMotion || !atmosphere || atmosphere.type === "none") return;
+        if (atmosphere.type === "shake") player.classList.add("effect-shake");
+        if (Number(atmosphere.duration) > 0) {
+          setTimeout(() => {
+            const layer = player.querySelector(".effect-layer");
+            if (layer) layer.remove();
+            player.classList.remove("effect-shake");
+          }, Number(atmosphere.duration));
+        }
+      }
+
+      function renderPlayer(container, scene, interactive) {
+        container.innerHTML = "";
+        const player = document.createElement("section");
+        const hasMedia = Boolean(
+          (scene.media.type === "image" || scene.media.type === "video") && scene.media.url
+        );
+        player.className =
+          "player" +
+          (project.theme.transparent ? " transparent" : "") +
+          (hasMedia ? " has-media" : "") +
+          (project.theme.showProgress ? " has-progress" : "");
+
+        player.style.setProperty("--player-bg",
+          project.theme.transparent ? "transparent" : project.theme.background);
+        player.style.setProperty("--player-accent", project.theme.accent);
+        player.style.setProperty("--heading-font", `"${project.theme.headingFont}"`);
+        player.style.setProperty("--body-font", `"${project.theme.bodyFont}"`);
+        player.style.setProperty("--border-color", project.theme.borderColor);
+
+        let backgroundImage = "";
+        if (scene.media.type === "image" && scene.media.url) {
+          backgroundImage = directMediaUrl(scene.media.url, "image");
+        } else if (!project.theme.transparent && project.theme.backgroundImage) {
+          backgroundImage = directMediaUrl(project.theme.backgroundImage, "image");
+        }
+        if (backgroundImage) {
+          player.style.backgroundImage = `url("${backgroundImage.replace(/"/g, "%22")}")`;
+        }
+
+        if (scene.media.type === "video" && scene.media.url) {
+          const video = document.createElement("video");
+          video.src = directMediaUrl(scene.media.url, "video");
+          video.autoplay = true;
+          video.muted = true;
+          video.loop = true;
+          video.playsInline = true;
+          player.appendChild(video);
+        }
+
+        const sceneIndex = project.scenes.findIndex(item => item.id === scene.id);
+        const overlay = document.createElement("div");
+        overlay.className = "player-overlay";
+
+        overlay.innerHTML = `
+          <div class="player-top">
+            <span>${escapeHtml(project.title)}</span>
+            <span>${sceneIndex + 1} / ${project.scenes.length}</span>
+          </div>
+          <div class="story-card card-${project.theme.cardStyle}">
+            <span class="scene-label">${escapeHtml(scene.title)}</span>
+            <h3>${escapeHtml(scene.task)}</h3>
+            <div class="player-answers"></div>
+            ${createProgressMarkup(calculateProgress(scene.id))}
+          </div>`;
+
+        const answerContainer = overlay.querySelector(".player-answers");
+        scene.answers.forEach(answer => {
+          const button = document.createElement("button");
+          button.className =
+            `player-answer answer-${project.theme.answerStyle} shape-${project.theme.shape}`;
+          button.innerHTML =
+            `<span>${escapeHtml(answer.icon)}</span><span>${escapeHtml(answer.text)}</span>`;
+          if (interactive) {
+            button.addEventListener("click", () => playAnswer(answer));
+          }
+          answerContainer.appendChild(button);
+        });
+
+        player.appendChild(overlay);
+        player.insertAdjacentHTML("beforeend", createEffectMarkup(scene.atmosphere));
+        container.appendChild(player);
+        applyTimedEffect(player, scene.atmosphere);
+      }
+
+      function playAnswer(answer) {
+        const media = answer.transition;
+        if (!media || media.type === "none" || !media.url) {
+          openNextScene(answer);
+          return;
+        }
+        app.innerHTML = "";
+        const transitionPlayer = document.createElement("section");
+        transitionPlayer.className = "player";
+        if (media.type === "image") {
+          const imageUrl = directMediaUrl(media.url, "image");
+          transitionPlayer.style.backgroundImage = `url("${imageUrl.replace(/"/g, "%22")}")`;
+          app.appendChild(transitionPlayer);
+          setTimeout(() => openNextScene(answer), 1800);
+        }
+        if (media.type === "video") {
+          const video = document.createElement("video");
+          video.src = directMediaUrl(media.url, "video");
+          video.autoplay = true;
+          video.controls = true;
+          video.playsInline = true;
+          video.addEventListener("ended", () => openNextScene(answer));
+          transitionPlayer.appendChild(video);
+          app.appendChild(transitionPlayer);
+        }
+      }
+
+      function openNextScene(answer) {
+        if (answer.action === "finish" || answer.nextSceneId === "__finish__") {
+          showFinalFeedback();
+          return;
+        }
+        playingSceneId = answer.nextSceneId || project.startSceneId;
+        visitedScenes.add(playingSceneId);
+        const nextScene =
+          project.scenes.find(scene => scene.id === playingSceneId) || project.scenes[0];
+        renderPlayer(app, nextScene, true);
+      }
+
+      function showFinalFeedback() {
+        const feedback = project.feedback;
+        const imageUrl = directMediaUrl(feedback.image, "image");
+        app.innerHTML = "";
+        const player = document.createElement("section");
+        player.className =
+          "player" +
+          (project.theme.transparent ? " transparent" : "") +
+          (imageUrl ? " has-media" : "") +
+          (project.theme.showProgress ? " has-progress" : "");
+        player.style.setProperty("--player-bg",
+          project.theme.transparent ? "transparent" : project.theme.background);
+        player.style.setProperty("--player-accent", project.theme.accent);
+        player.style.setProperty("--heading-font", `"${project.theme.headingFont}"`);
+        player.style.setProperty("--body-font", `"${project.theme.bodyFont}"`);
+        player.style.setProperty("--border-color", project.theme.borderColor);
+        if (imageUrl) {
+          player.style.backgroundImage = `url("${imageUrl.replace(/"/g, "%22")}")`;
+        }
+        player.innerHTML = `
+          <div class="player-overlay">
+            <div></div>
+            <div class="story-card card-${project.theme.cardStyle}">
+              <span class="scene-label">FINISH</span>
+              <h3>${escapeHtml(feedback.title)}</h3>
+              <p>${escapeHtml(feedback.text)}</p>
+              <button
+                id="restartGameButton"
+                class="player-answer answer-${project.theme.answerStyle} shape-${project.theme.shape}"
+              >${escapeHtml(feedback.restartText)}</button>
+              ${createProgressMarkup(100)}
+            </div>
+          </div>`;
+        app.appendChild(player);
+        document.getElementById("restartGameButton").addEventListener("click", () => {
+          playingSceneId = project.startSceneId;
+          visitedScenes = new Set([playingSceneId]);
+          const startScene =
+            project.scenes.find(scene => scene.id === playingSceneId) || project.scenes[0];
+          renderPlayer(app, startScene, true);
+        });
+      }
+
+      const startScene =
+        project.scenes.find(scene => scene.id === project.startSceneId) || project.scenes[0];
+      renderPlayer(app, startScene, true);
+    }
+  </script>
+</body>
+</html>
